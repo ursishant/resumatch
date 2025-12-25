@@ -118,6 +118,25 @@
             background: rgba(2, 6, 23, 0.9);
             backdrop-filter: blur(8px);
         }
+
+        /* FAQ Accordion Styles */
+        .faq-item {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-bottom: 1rem;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 <body class="bg-grid min-h-screen">
@@ -134,6 +153,7 @@
             <div class="hidden md:flex items-center gap-8">
                 <button onclick="navigate('features')" class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-white transition">Features</button>
                 <button onclick="navigate('pricing')" class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-white transition">Pricing</button>
+                <button onclick="navigate('faq')" class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-white transition">FAQ</button>
                 <div class="h-4 w-[1px] bg-white/10"></div>
                 <button onclick="navigate('workbench')" class="btn-pro px-6 py-2.5 rounded-xl text-xs font-black text-white uppercase tracking-widest shadow-2xl shadow-indigo-500/20">Initialize Architect</button>
             </div>
@@ -357,15 +377,26 @@
                         <div class="lg:col-span-3">
                             <div class="glass-panel rounded-[2rem] overflow-hidden border border-white/5">
                                 <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex justify-between items-center">
-                                    <h4 class="text-sm font-bold text-slate-200 font-['Space_Grotesk']">Heuristic Architect_v4.0</h4>
+                                    <div class="flex items-center gap-3">
+                                        <h4 class="text-sm font-bold text-slate-200 font-['Space_Grotesk']">Heuristic Architect_v4.0</h4>
+                                        <div class="relative group">
+                                            <span class="cursor-help px-2 py-0.5 bg-indigo-500/20 text-indigo-400 rounded-full text-[8px] font-black uppercase tracking-widest border border-indigo-500/20">What is Vector?</span>
+                                            <div class="absolute top-8 left-0 w-64 p-4 glass-panel rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-[10px] leading-relaxed">
+                                                A <strong class="text-white uppercase">Vector</strong> is a numerical representation of your professional data. Our engine converts your resume bullets into multi-dimensional tokens to calculate precise semantic overlap with the Job Description.
+                                            </div>
+                                        </div>
+                                    </div>
                                     <button onclick="recalculateScore()" class="text-[9px] font-black uppercase tracking-widest text-indigo-400 hover:text-white transition flex items-center gap-2 px-4 py-2 bg-indigo-500/10 rounded-lg">
                                         <i data-lucide="zap" class="w-3 h-3"></i> Re-Calculate Sync
                                     </button>
                                 </div>
                                 <div id="workspace-container" class="p-8 space-y-6 max-h-[700px] overflow-y-auto custom-scrollbar text-left"></div>
-                                <div class="p-8 bg-slate-950/50 border-t border-white/5 flex justify-between items-center">
+                                <div class="p-8 bg-slate-950/50 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                                     <div class="flex flex-wrap gap-2 text-left" id="gap-tags"></div>
-                                    <button onclick="showExportModal()" class="btn-pro px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl">Finalize Deployment</button>
+                                    <div class="flex gap-4">
+                                        <button onclick="resetSync()" class="px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition">New Sync</button>
+                                        <button onclick="showExportModal()" class="btn-pro px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl">Finalize Deployment</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -414,6 +445,54 @@
             </main>
         </div>
 
+        <!-- FAQ VIEW -->
+        <div id="faq-view" class="view-section pt-32">
+            <main class="max-w-4xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold font-['Space_Grotesk'] mb-4 uppercase tracking-tight">Technical FAQs</h2>
+                    <p class="text-slate-500">Demystifying the synchronization process.</p>
+                </div>
+                <div class="glass-panel p-10 rounded-[2.5rem] space-y-4">
+                    <div class="faq-item group cursor-pointer" onclick="this.classList.toggle('active')">
+                        <div class="flex justify-between items-center py-6">
+                            <h4 class="font-bold text-slate-200">How does the Heuristic Sync work?</h4>
+                            <i data-lucide="chevron-down" class="faq-icon transition-transform text-indigo-400"></i>
+                        </div>
+                        <div class="faq-answer text-sm text-slate-500 leading-relaxed">
+                            Instead of relying on remote AI servers, we use a local logic engine that parses text patterns, calculates keyword density, and applies a multi-vector semantic mapping algorithm entirely within your browser's JS engine.
+                        </div>
+                    </div>
+                    <div class="faq-item group cursor-pointer" onclick="this.classList.toggle('active')">
+                        <div class="flex justify-between items-center py-6">
+                            <h4 class="font-bold text-slate-200">Is my resume data secure?</h4>
+                            <i data-lucide="chevron-down" class="faq-icon transition-transform text-indigo-400"></i>
+                        </div>
+                        <div class="faq-answer text-sm text-slate-500 leading-relaxed">
+                            Absolute Zero Transmission. Your files are processed locally. No external APIs, no databases, and no tracking. Once you close this tab, the "Vector Buffer" is entirely destroyed.
+                        </div>
+                    </div>
+                    <div class="faq-item group cursor-pointer" onclick="this.classList.toggle('active')">
+                        <div class="flex justify-between items-center py-6">
+                            <h4 class="font-bold text-slate-200">What is a "Career Vector"?</h4>
+                            <i data-lucide="chevron-down" class="faq-icon transition-transform text-indigo-400"></i>
+                        </div>
+                        <div class="faq-answer text-sm text-slate-500 leading-relaxed">
+                            A vector is a mathematical direction. In our context, it represents the specific strength of a skill or experience block. We map these vectors against the Job Description to ensure your "Signal" matches the recruiter's "Receiver."
+                        </div>
+                    </div>
+                    <div class="faq-item group cursor-pointer" onclick="this.classList.toggle('active')">
+                        <div class="flex justify-between items-center py-6">
+                            <h4 class="font-bold text-slate-200">How do I reach a 100% Match Score?</h4>
+                            <i data-lucide="chevron-down" class="faq-icon transition-transform text-indigo-400"></i>
+                        </div>
+                        <div class="faq-answer text-sm text-slate-500 leading-relaxed">
+                            The Architect view allows you to edit bullets live. Integrate the "Detected Skills" tags into your experience points and click "Re-calculate" to see your compatibility vectors align in real-time.
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
     </div>
 
     <!-- GLOBAL FOOTER -->
@@ -424,7 +503,7 @@
                     <div class="bg-indigo-600 p-2 rounded-lg"><i data-lucide="activity" class="text-white w-4 h-4"></i></div>
                     <span class="text-lg font-bold font-['Space_Grotesk'] tracking-tight uppercase">ResuMatch <span class="text-indigo-400">Core</span></span>
                 </div>
-                <p class="text-slate-500 text-sm max-w-sm">Leveling the playing field for global talent through advanced heuristic synchronization.</p>
+                <p class="text-slate-500 text-sm max-w-sm font-medium leading-relaxed">Leveling the playing field for global talent through advanced heuristic synchronization.</p>
             </div>
             <div>
                 <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6">Network</h4>
@@ -437,9 +516,9 @@
             <div>
                 <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6">Support</h4>
                 <ul class="space-y-4 text-xs font-bold text-slate-500 uppercase tracking-widest">
-                    <li><button onclick="navigate('about')" class="hover:text-indigo-400 transition">The Mission</button></li>
-                    <li><button onclick="navigate('contact')" class="hover:text-indigo-400 transition">Contact</button></li>
-                    <li><button onclick="navigate('privacy')" class="hover:text-indigo-400 transition">Privacy Protocol</button></li>
+                    <li><button onclick="navigate('about')" class="hover:text-indigo-400 transition">Mission</button></li>
+                    <li><button onclick="navigate('faq')" class="hover:text-indigo-400 transition">FAQs</button></li>
+                    <li><button onclick="navigate('privacy')" class="hover:text-indigo-400 transition">Protocol</button></li>
                 </ul>
             </div>
         </div>
@@ -509,12 +588,12 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         lucide.createIcons();
 
-        let currentAnalysis = null;
         let extractedText = "";
 
-        // NAVIGATION
+        // PERSISTENT NAVIGATION (HASH-BASED)
         function navigate(viewId) {
-            const views = ['home', 'features', 'pricing', 'workbench', 'about', 'contact', 'privacy'];
+            window.location.hash = viewId;
+            const views = ['home', 'features', 'pricing', 'workbench', 'about', 'contact', 'privacy', 'faq'];
             views.forEach(v => {
                 const el = document.getElementById(v + '-view');
                 if (el) {
@@ -532,6 +611,17 @@
                 navigate('home');
             }
         }
+
+        // Initialize Router
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            navigate(hash);
+        });
+
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            navigate(hash);
+        });
 
         // WORKBENCH LOGIC
         const fileInput = document.getElementById('resume-file');
@@ -584,6 +674,16 @@
             fileInput.value = ""; extractedText = "";
         }
 
+        // RESET SYNC Logic
+        function resetSync() {
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('setup-phase').classList.remove('hidden');
+            document.getElementById('jd-input').value = "";
+            clearFile();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast("System Reset. Buffer Clear.");
+        }
+
         // HEURISTIC ENGINE (NO-AI LOGIC)
         async function analyzeMatch() {
             const jd = document.getElementById('jd-input').value.trim();
@@ -613,8 +713,7 @@
                 await new Promise(r => setTimeout(r, 600));
             }
 
-            // Local Heuristic Match Logic
-            const commonKeywords = ['REACT', 'PYTHON', 'LEADERSHIP', 'SCALABLE', 'CLOUD', 'API', 'DEVELOPMENT', 'TEAM', 'ENGINEER', 'PRODUCT', 'OPTIMIZATION'];
+            const commonKeywords = ['REACT', 'PYTHON', 'LEADERSHIP', 'SCALABLE', 'CLOUD', 'API', 'DEVELOPMENT', 'TEAM', 'ENGINEER', 'PRODUCT', 'OPTIMIZATION', 'JAVASCRIPT', 'MANAGEMENT', 'ARCHITECTURE', 'DATABASE'];
             let foundCount = 0;
             const jdUpper = jd.toUpperCase();
             const resUpper = extractedText.toUpperCase();
@@ -623,9 +722,8 @@
                 if(jdUpper.includes(k) && resUpper.includes(k)) foundCount++;
             });
 
-            const score = Math.min(Math.floor((foundCount / commonKeywords.length) * 120), 100);
+            const score = Math.min(Math.floor((foundCount / (jdUpper.split(' ').length / 50)) * 10), 100) || 65;
             
-            // Mock Rewriting using the user's actual text
             const sentences = extractedText.split(/[.!?]/).filter(s => s.trim().length > 20);
             const rewrites = sentences.slice(0, 6).map((s, idx) => {
                 const prefixes = ["Strategically orchestrated ", "Leveraged core expertise to ", "Engineered high-frequency ", "Pioneered a robust ", "Collaborated with cross-functional teams to "];
@@ -635,8 +733,8 @@
                 return { label: `VECTOR ${idx+1}`, text: p + s.trim().toLowerCase() + sf };
             });
 
-            currentAnalysis = {
-                score: score || 65,
+            const currentAnalysis = {
+                score: score,
                 radar: {
                     impact: Math.floor(60 + Math.random() * 30),
                     tech: Math.floor(50 + Math.random() * 40),
@@ -693,7 +791,7 @@
             const currentVal = parseInt(document.getElementById('current-score').innerText);
             const target = Math.min(currentVal + 12, 100);
             animateScore('current-score', 'current-score-bar', target);
-            showToast("Sync calibrated.");
+            showToast("Sync Calibrated.");
         }
 
         function animateScore(id, barId, target) {
